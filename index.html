@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สวนอินทผลัมครูยุทธ | หนองบัวลำภู</title>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons (สำหรับไอคอนต่างๆ) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: #FFFBEB;
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Mali', cursive;
+        }
+        .text-brown-primary { color: #5D4037; }
+        .blob-shape {
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+        /* Hide scrollbar for clean carousel */
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useCallback } = React;
+
+        const App = () => {
+            const [isMenuOpen, setIsMenuOpen] = useState(false);
+            const [currentSlide, setCurrentSlide] = useState(0);
+
+            // --- 1. SEO Setup ---
+            useEffect(() => {
+                document.title = "สวนอินทผลัมครูยุทธ | หนองบัวลำภู - พันธุ์บาฮีเหลือง";
+                
+                const setMeta = (name, content) => {
+                    let meta = document.querySelector(`meta[name="${name}"]`);
+                    if (!meta) {
+                        meta = document.createElement('meta');
+                        meta.name = name;
+                        document.head.appendChild(meta);
+                    }
+                    meta.content = content;
+                };
+
+                const setOg = (property, content) => {
+                    let meta = document.querySelector(`meta[property="${property}"]`);
+                    if (!meta) {
+                        meta = document.createElement('meta');
+                        meta.setAttribute('property', property);
+                        document.head.appendChild(meta);
+                    }
+                    meta.content = content;
+                };
+
+                setMeta('description', 'สวนอินทผลัมครูยุทธ จำหน่ายอินทผลัมสดพันธุ์บาฮีเหลือง หวาน กรอบ อร่อย ปลอดสารเคมี อ.นากลาง อ.นาวัง จ.หนองบัวลำภู');
+                setMeta('keywords', 'อินทผลัม, บาฮีเหลือง, หนองบัวลำภู, สวนครูยุทธ, ผลไม้ปลอดสาร');
+                
+                setOg('og:title', 'สวนอินทผลัมครูยุทธ | หวาน กรอบ อร่อย');
+                setOg('og:description', 'อินทผลัมเกรดพรีเมียม ปลอดสารเคมี ส่งทั่วไทย เริ่มต้น 60 บาท');
+                setOg('og:image', 'https://images.unsplash.com/photo-1563486884632-47408ba74a64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+
+                // Initialize Icons whenever component mounts or updates
+                lucide.createIcons();
+            });
+
+            // Re-run icons when state changes (like menu toggle)
+            useEffect(() => {
+                lucide.createIcons();
+            }, [isMenuOpen, currentSlide]);
+
+            const scrollToSection = (id) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                    setIsMenuOpen(false);
+                }
+            };
+
+            const galleryImages = [
+                "https://images.unsplash.com/photo-1615485500704-8e99099928b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1596627706354-9549d0124b81?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1628606138676-e260840c112e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1506917639537-8e6f15777490?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1601646270836-3a7fd967664f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            ];
+
+            const nextSlide = useCallback(() => {
+                setCurrentSlide((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1));
+            }, [galleryImages.length]);
+
+            const prevSlide = () => {
+                setCurrentSlide((prev) => (prev === 0 ? galleryImages.length - 1 : prev - 1));
+            };
+
+            useEffect(() => {
+                const timer = setInterval(() => nextSlide(), 4000);
+                return () => clearInterval(timer);
+            }, [nextSlide]);
+
+            return (
+                <div className="min-h-screen flex flex-col text-[#5D4037]">
+                    
+                    {/* Navigation */}
+                    <nav className="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50">
+                        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+                            <div className="flex items-center gap-3 cursor-pointer" onClick={() => scrollToSection('home')}>
+                                {/* Logo Area */}
+                                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-amber-400 shadow-md bg-white flex items-center justify-center relative">
+                                    <img 
+                                        src="logo.jpg" 
+                                        alt="Logo" 
+                                        className="w-full h-full object-cover"
+                                        onError={(e) => {
+                                            e.target.style.display='none'; 
+                                            e.target.parentNode.innerHTML='<span class="text-xs font-bold text-amber-600">Logo</span>';
+                                        }}
+                                    />
+                                </div>
+                                <span className="brand-font text-xl md:text-2xl font-bold text-amber-800">สวนครูยุทธ</span>
+                            </div>
+
+                            {/* Desktop Menu */}
+                            <div className="hidden md:flex space-x-8 font-medium">
+                                <button onClick={() => scrollToSection('home')} className="hover:text-amber-500 transition">หน้าแรก</button>
+                                <button onClick={() => scrollToSection('about')} className="hover:text-amber-500 transition">เกี่ยวกับสวน</button>
+                                <button onClick={() => scrollToSection('products')} className="hover:text-amber-500 transition">สินค้า</button>
+                                <button onClick={() => scrollToSection('gallery')} className="hover:text-amber-500 transition">ผลงาน</button>
+                                <button onClick={() => scrollToSection('contact')} className="hover:text-amber-500 transition">ติดต่อเรา</button>
+                            </div>
+
+                            {/* Mobile Menu Button */}
+                            <button className="md:hidden text-amber-800" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                                <i data-lucide={isMenuOpen ? "x" : "menu"}></i>
+                            </button>
+                        </div>
+
+                        {/* Mobile Dropdown */}
+                        {isMenuOpen && (
+                            <div className="md:hidden bg-white border-t border-amber-100 p-4 space-y-3 shadow-lg">
+                                <button onClick={() => scrollToSection('home')} className="block w-full text-left py-2 px-4 hover:bg-amber-50 rounded-lg">หน้าแรก</button>
+                                <button onClick={() => scrollToSection('about')} className="block w-full text-left py-2 px-4 hover:bg-amber-50 rounded-lg">เกี่ยวกับสวน</button>
+                                <button onClick={() => scrollToSection('products')} className="block w-full text-left py-2 px-4 hover:bg-amber-50 rounded-lg">สินค้า</button>
+                                <button onClick={() => scrollToSection('gallery')} className="block w-full text-left py-2 px-4 hover:bg-amber-50 rounded-lg">ผลงาน</button>
+                                <button onClick={() => scrollToSection('contact')} className="block w-full text-left py-2 px-4 hover:bg-amber-50 rounded-lg">ติดต่อเรา</button>
+                            </div>
+                        )}
+                    </nav>
+
+                    {/* Hero Section */}
+                    <header id="home" className="relative pt-16 pb-24 md:pt-24 md:pb-32 overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-full z-0 opacity-10 pointer-events-none">
+                            <div className="absolute top-10 left-10 w-64 h-64 bg-amber-300 rounded-full blur-3xl"></div>
+                            <div className="absolute bottom-10 right-10 w-80 h-80 bg-orange-300 rounded-full blur-3xl"></div>
+                        </div>
+
+                        <div className="container mx-auto px-4 relative z-10 flex flex-col md:flex-row items-center">
+                            <div className="md:w-1/2 text-center md:text-left mb-10 md:mb-0">
+                                <span className="inline-block bg-amber-100 text-amber-800 px-4 py-1 rounded-full text-sm font-semibold mb-4 border border-amber-200">
+                                    🌿 ปลอดสารเคมี 100%
+                                </span>
+                                <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight text-amber-900">
+                                    อินทผลัม <span className="text-amber-500">บาฮีเหลือง</span><br />
+                                    หวาน กรอบ อร่อย
+                                </h1>
+                                <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-lg mx-auto md:mx-0">
+                                    ผลผลิตจากต้นเนื้อเยื่อคัดเกรด สวนครูยุทธ หนองบัวลำภู ดูแลด้วยใจ ส่งตรงถึงมือคุณ
+                                </p>
+                                <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                                    <button onClick={() => scrollToSection('products')} className="bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105 flex items-center justify-center gap-2">
+                                        <i data-lucide="shopping-basket" className="w-5 h-5"></i> สั่งซื้อเลย
+                                    </button>
+                                    <button onClick={() => scrollToSection('contact')} className="bg-white hover:bg-gray-50 text-amber-900 border-2 border-amber-200 font-bold py-3 px-8 rounded-full transition flex items-center justify-center gap-2">
+                                        ติดต่อสอบถาม
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div className="md:w-1/2 flex justify-center relative">
+                                <div className="relative w-80 h-80 md:w-96 md:h-96">
+                                    <div className="absolute inset-0 bg-amber-200 blob-shape transform rotate-6 opacity-50 animate-pulse"></div>
+                                    <img 
+                                        src="https://images.unsplash.com/photo-1563486884632-47408ba74a64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                                        alt="อินทผลัมสด" 
+                                        className="relative z-10 w-full h-full object-cover rounded-3xl shadow-2xl border-4 border-white transform -rotate-3 hover:rotate-0 transition duration-500"
+                                    />
+                                    <div className="absolute -bottom-6 -right-6 bg-white p-4 rounded-full shadow-xl z-20 flex flex-col items-center animate-bounce">
+                                        <span className="brand-font text-amber-600 font-bold text-lg">คัดเกรด</span>
+                                        <span className="text-2xl">🏆</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* Highlight Section: Tissue Culture vs Seed (New Section) */}
+                    <section className="py-12 bg-white relative overflow-hidden">
+                        <div className="container mx-auto px-4 relative z-10">
+                            <div className="bg-amber-50 rounded-3xl shadow-lg p-8 md:p-12 border-2 border-amber-100 transform hover:scale-[1.01] transition duration-500">
+                                <div className="flex flex-col md:flex-row items-center gap-8">
+                                    <div className="md:w-1/2">
+                                        <span className="inline-block bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">รู้หรือไม่?</span>
+                                        <h2 className="text-2xl md:text-3xl font-bold text-amber-900 mb-4 brand-font leading-tight">
+                                            ทำไมต้องเลือกทาน <br/>
+                                            <span className="text-amber-600 text-3xl md:text-4xl">"ต้นเนื้อเยื่อ"</span> ?
+                                        </h2>
+                                        <p className="text-gray-600 mb-4 text-lg leading-relaxed">
+                                            เราคัดสรรสายพันธุ์อินทผลัมที่เพาะเลี้ยงจากเนื้อเยื่อ (Tissue Culture) เท่านั้น เพราะมีพันธุกรรมที่นิ่งและเหมือนต้นแม่พันธุ์ 100%
+                                        </p>
+                                        <div className="p-4 bg-white rounded-xl border-l-4 border-red-400 mb-2">
+                                            <p className="text-gray-700 text-sm">
+                                                <strong className="text-red-500 block mb-1">ข้อเสียของต้นเพาะเมล็ด:</strong>
+                                                มีโอกาสกลายพันธุ์สูง รสชาติไม่แน่นอน และมักจะมีรส <span className="underline decoration-red-400 decoration-2">"ฝาด"</span> ปนอยู่
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="md:w-1/2 w-full">
+                                        <div className="bg-white rounded-2xl p-6 shadow-sm border border-amber-100">
+                                            <h3 className="text-xl font-bold text-amber-800 mb-4 flex items-center gap-2">
+                                                <i data-lucide="sprout" className="text-green-500"></i> จุดเด่นของต้นเนื้อเยื่อ
+                                            </h3>
+                                            <ul className="space-y-4">
+                                                <li className="flex items-center gap-4 group">
+                                                    <div className="bg-green-100 rounded-full p-2 group-hover:bg-green-500 transition-colors duration-300">
+                                                        <i data-lucide="check" className="w-5 h-5 text-green-600 group-hover:text-white transition-colors"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-lg text-amber-900">หวาน กรอบ อร่อย</h4>
+                                                        <p className="text-sm text-gray-500">รสชาติดีเยี่ยมทุกผล ไม่ต้องลุ้น</p>
+                                                    </div>
+                                                </li>
+                                                <li className="flex items-center gap-4 group">
+                                                    <div className="bg-green-100 rounded-full p-2 group-hover:bg-green-500 transition-colors duration-300">
+                                                        <i data-lucide="check" className="w-5 h-5 text-green-600 group-hover:text-white transition-colors"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-lg text-amber-900">ไม่ฝาด 100%</h4>
+                                                        <p className="text-sm text-gray-500">หมดปัญหากินแล้วลิ้นสาก หรือรสชาติเฝื่อน</p>
+                                                    </div>
+                                                </li>
+                                                <li className="flex items-center gap-4 group">
+                                                    <div className="bg-green-100 rounded-full p-2 group-hover:bg-green-500 transition-colors duration-300">
+                                                        <i data-lucide="check" className="w-5 h-5 text-green-600 group-hover:text-white transition-colors"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-lg text-amber-900">คุณภาพสม่ำเสมอ</h4>
+                                                        <p className="text-sm text-gray-500">มาตรฐานเดียวกันทั้งสวน</p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* About Section */}
+                    <section id="about" className="py-16 bg-white">
+                        <div className="container mx-auto px-4">
+                            <div className="text-center mb-16">
+                                <h2 className="text-3xl md:text-4xl font-bold text-amber-900 mb-4">ทำไมต้องสวนครูยุทธ?</h2>
+                                <div className="w-20 h-1 bg-amber-400 mx-auto rounded-full"></div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                {[
+                                    { icon: "sprout", title: "ต้นเนื้อเยื่อคัดเกรด", desc: "เราเลือกใช้ต้นพันธุ์เนื้อเยื่อคุณภาพสูง เพื่อให้ได้ผลผลิตที่รสชาติดี หวานสม่ำเสมอทุกต้น" },
+                                    { icon: "shield-check", title: "ไร้สารเคมี", desc: "ปลูกด้วยความรักและใส่ใจ ไม่ใช้สารเคมีอันตราย ปลอดภัยต่อทั้งผู้ปลูกและผู้บริโภค" },
+                                    { icon: "map-pin", title: "ดินดี หนองบัวลำภู", desc: "พื้นที่เพาะปลูกใน อ.นากลาง และ อ.นาวัง สภาพอากาศเหมาะสม ทำให้ได้ผลอินทผลัมที่สมบูรณ์" }
+                                ].map((feature, index) => (
+                                    <div key={index} className="bg-amber-50 p-8 rounded-2xl hover:shadow-xl transition duration-300 border border-amber-100 text-center group">
+                                        <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-md group-hover:scale-110 transition text-amber-500">
+                                            <i data-lucide={feature.icon} className="w-8 h-8"></i>
+                                        </div>
+                                        <h3 className="text-xl font-bold mb-3 text-amber-800">{feature.title}</h3>
+                                        <p className="text-gray-600">{feature.desc}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Products Section */}
+                    <section id="products" className="py-16 bg-gradient-to-b from-amber-50 to-orange-100">
+                        <div className="container mx-auto px-4">
+                            <div className="text-center mb-12">
+                                <h2 className="text-3xl md:text-4xl font-bold text-amber-900 mb-4">สินค้าแนะนำ</h2>
+                                <p className="text-gray-600 max-w-2xl mx-auto">อินทผลัมทานผลสด พันธุ์บาฮี (Barhee) สีเหลืองทอง กรอบ หวาน อร่อย ไม่ฝาด</p>
+                            </div>
+
+                            <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row">
+                                <div className="md:w-1/2 h-64 md:h-auto relative">
+                                    <img 
+                                        src="https://images.unsplash.com/photo-1628606138676-e260840c112e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                                        alt="กล่องอินทผลัม" 
+                                        className="w-full h-full object-cover"
+                                    />
+                                    <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-md">
+                                        ขายดี 🔥
+                                    </div>
+                                </div>
+                                <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+                                    <h3 className="text-2xl font-bold text-amber-900 mb-2">อินทผลัมบาฮี (ผลสด)</h3>
+                                    <p className="text-gray-500 mb-6">คัดไซส์พิเศษ ผิวสวย เนื้อแน่น เหมาะสำหรับทานเองหรือเป็นของฝากผู้ใหญ่</p>
+                                    
+                                    <div className="space-y-4 mb-8">
+                                        <div className="flex items-center gap-3">
+                                            <i data-lucide="check-circle" className="text-green-500 w-5 h-5"></i>
+                                            <span>หวาน กรอบ ไม่ฝาด</span>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <i data-lucide="check-circle" className="text-green-500 w-5 h-5"></i>
+                                            <span>เก็บสดใหม่วันต่อวัน</span>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <i data-lucide="truck" className="text-amber-500 w-5 h-5"></i>
+                                            <span className="font-bold text-amber-700">โปรฯ ค่าส่ง 3 กก. แรก เพียง 60 บาท!</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex gap-4">
+                                        <a href="tel:0857445344" className="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-xl text-center transition shadow-lg flex items-center justify-center gap-2">
+                                            <i data-lucide="phone" className="w-5 h-5"></i> โทรสั่งเลย
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    {/* Gallery Section (Infinite Carousel) */}
+                    <section id="gallery" className="py-16 bg-amber-50 relative">
+                        <div className="container mx-auto px-4">
+                            <div className="flex items-center justify-between mb-8">
+                                <h2 className="text-2xl md:text-4xl font-bold text-amber-900 flex items-center gap-2">
+                                    <i data-lucide="image" className="text-amber-500"></i> บรรยากาศในสวน
+                                </h2>
+                                <div className="hidden md:flex gap-2">
+                                    {galleryImages.map((_, idx) => (
+                                        <button 
+                                            key={idx}
+                                            onClick={() => setCurrentSlide(idx)}
+                                            className={`w-3 h-3 rounded-full transition-all ${currentSlide === idx ? 'bg-amber-500 w-6' : 'bg-amber-200'}`}
+                                        ></button>
+                                    ))}
+                                </div>
+                            </div>
+                            
+                            <div className="relative max-w-5xl mx-auto group">
+                                <div className="overflow-hidden rounded-2xl shadow-xl border-4 border-white aspect-video md:aspect-[21/9] relative bg-amber-100">
+                                   <div 
+                                      className="flex transition-transform duration-500 ease-out h-full" 
+                                      style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                                   >
+                                     {galleryImages.map((img, index) => (
+                                       <div key={index} className="min-w-full h-full relative">
+                                         <img src={img} alt={`ภาพบรรยากาศสวน ${index + 1}`} className="w-full h-full object-cover" />
+                                         <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/60 to-transparent p-4 md:p-6">
+                                            <p className="text-white text-lg md:text-xl font-bold">สวนอินทผลัมครูยุทธ</p>
+                                         </div>
+                                       </div>
+                                     ))}
+                                   </div>
+                                </div>
+
+                                <button onClick={prevSlide} className="absolute top-1/2 left-2 md:left-4 -translate-y-1/2 bg-white/80 hover:bg-white text-amber-800 p-2 md:p-3 rounded-full shadow-lg transition backdrop-blur-sm z-10">
+                                    <i data-lucide="chevron-left" className="w-6 h-6"></i>
+                                </button>
+                                <button onClick={nextSlide} className="absolute top-1/2 right-2 md:right-4 -translate-y-1/2 bg-white/80 hover:bg-white text-amber-800 p-2 md:p-3 rounded-full shadow-lg transition backdrop-blur-sm z-10">
+                                    <i data-lucide="chevron-right" className="w-6 h-6"></i>
+                                </button>
+
+                                <div className="flex justify-center gap-2 mt-4 md:hidden">
+                                    {galleryImages.map((_, idx) => (
+                                        <button 
+                                            key={idx}
+                                            onClick={() => setCurrentSlide(idx)}
+                                            className={`w-2 h-2 rounded-full transition-all ${currentSlide === idx ? 'bg-amber-500 w-4' : 'bg-amber-300'}`}
+                                        ></button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Contact Section */}
+                    <section id="contact" className="py-16 bg-white">
+                        <div className="container mx-auto px-4">
+                            <div className="max-w-4xl mx-auto bg-[#FFF8E1] rounded-3xl p-8 md:p-12 border-2 border-dashed border-amber-300 relative overflow-hidden">
+                                <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-amber-200 rounded-full opacity-50"></div>
+                                <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-orange-200 rounded-full opacity-50"></div>
+
+                                <div className="relative z-10 text-center">
+                                    <h2 className="text-3xl md:text-4xl font-bold text-amber-900 mb-8 brand-font">ติดต่อสวนครูยุทธ</h2>
+                                    
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-amber-100">
+                                            <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                <i data-lucide="phone" className="w-6 h-6 text-amber-600"></i>
+                                            </div>
+                                            <h4 className="font-bold text-lg mb-2">เบอร์โทรศัพท์</h4>
+                                            <p className="text-gray-600">085-744-5344 (แม่เจียม)</p>
+                                            <p className="text-gray-600">064-239-6944</p>
+                                        </div>
+                                        
+                                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-amber-100">
+                                            <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                <i data-lucide="map-pin" className="w-6 h-6 text-amber-600"></i>
+                                            </div>
+                                            <h4 className="font-bold text-lg mb-2">สถานที่ตั้ง</h4>
+                                            <p className="text-gray-600">อำเภอนากลาง และ นาวัง</p>
+                                            <p className="text-gray-600">จังหวัดหนองบัวลำภู</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="inline-block bg-white px-6 py-4 rounded-xl shadow-md border-l-4 border-amber-500 text-left">
+                                        <h5 className="font-bold text-amber-800 mb-1 flex items-center gap-2">
+                                            <i data-lucide="truck" className="w-5 h-5"></i> รายละเอียดการจัดส่ง
+                                        </h5>
+                                        <p className="text-gray-600 text-sm">บริการส่งต่างจังหวัด ค่าส่งเริ่มต้น 3 กิโลกรัมแรก <span className="text-red-500 font-bold text-lg">60 บาท</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Footer */}
+                    <footer className="bg-[#5D4037] text-amber-100 py-8">
+                        <div className="container mx-auto px-4 text-center">
+                            <h3 className="brand-font text-2xl font-bold mb-4">สวนอินทผลัมครูยุทธ</h3>
+                            <div className="flex justify-center space-x-6 mb-6">
+                                <a href="#" className="hover:text-white transition"><i data-lucide="facebook" className="w-6 h-6"></i></a>
+                                <a href="#" className="hover:text-white transition"><i data-lucide="message-circle" className="w-6 h-6"></i></a>
+                            </div>
+                            <p className="text-sm opacity-70">© {new Date().getFullYear()} สวนอินทผลัมครูยุทธ หนองบัวลำภู. สงวนลิขสิทธิ์.</p>
+                        </div>
+                    </footer>
+
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
