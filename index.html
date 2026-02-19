@@ -74,11 +74,12 @@
                 };
 
                 setMeta('description', 'สวนอินทผลัมครูยุทธ จำหน่ายอินทผลัมสดพันธุ์บาฮีเหลือง หวาน กรอบ อร่อย ปลอดสารเคมี อ.นากลาง อ.นาวัง จ.หนองบัวลำภู');
-                setMeta('keywords', 'อินทผลัม, บาฮีเหลือง, หนองบัวลำภู, สวนครูยุทธ, ผลไม้ปลอดสาร');
+                setMeta('keywords', 'อินทผลัม, บาฮีเหลือง, หนองบัวลำภู, สวนครูยุทธ, ผลไม้ปลอดสาร, ต้นเนื้อเยื่อ');
                 
                 setOg('og:title', 'สวนอินทผลัมครูยุทธ | หวาน กรอบ อร่อย');
                 setOg('og:description', 'อินทผลัมเกรดพรีเมียม ปลอดสารเคมี ส่งทั่วไทย เริ่มต้น 60 บาท');
-                setOg('og:image', 'https://images.unsplash.com/photo-1563486884632-47408ba74a64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+                // แก้ไขรูป OG ให้ชี้ไปที่โฟลเดอร์ images (ควรใช้ URL เต็มเมื่ออัพขึ้นเซิร์ฟเวอร์จริง)
+                setOg('og:image', 'images/hero-bg.jpg');
 
                 // Initialize Icons whenever component mounts or updates
                 lucide.createIcons();
@@ -97,12 +98,13 @@
                 }
             };
 
+            // อัปเดตลิงก์รูปภาพแกลเลอรี่ให้ชี้ไปที่โฟลเดอร์ images
             const galleryImages = [
-                "https://images.unsplash.com/photo-1615485500704-8e99099928b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-                "https://images.unsplash.com/photo-1596627706354-9549d0124b81?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-                "https://images.unsplash.com/photo-1628606138676-e260840c112e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-                "https://images.unsplash.com/photo-1506917639537-8e6f15777490?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-                "https://images.unsplash.com/photo-1601646270836-3a7fd967664f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                "images/gallery-1.jpg",
+                "images/gallery-2.jpg",
+                "images/gallery-3.jpg",
+                "images/gallery-4.jpg",
+                "images/gallery-5.jpg"
             ];
 
             const nextSlide = useCallback(() => {
@@ -128,7 +130,7 @@
                                 {/* Logo Area */}
                                 <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-amber-400 shadow-md bg-white flex items-center justify-center relative">
                                     <img 
-                                        src="logo.jpg" 
+                                        src="images/logo.jpg" 
                                         alt="Logo" 
                                         className="w-full h-full object-cover"
                                         onError={(e) => {
@@ -200,7 +202,7 @@
                                 <div className="relative w-80 h-80 md:w-96 md:h-96">
                                     <div className="absolute inset-0 bg-amber-200 blob-shape transform rotate-6 opacity-50 animate-pulse"></div>
                                     <img 
-                                        src="https://images.unsplash.com/photo-1563486884632-47408ba74a64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                                        src="images/hero-bg.jpg" 
                                         alt="อินทผลัมสด" 
                                         className="relative z-10 w-full h-full object-cover rounded-3xl shadow-2xl border-4 border-white transform -rotate-3 hover:rotate-0 transition duration-500"
                                     />
@@ -213,7 +215,7 @@
                         </div>
                     </header>
 
-                    {/* Highlight Section: Tissue Culture vs Seed (New Section) */}
+                    {/* Highlight Section: Tissue Culture vs Seed */}
                     <section className="py-12 bg-white relative overflow-hidden">
                         <div className="container mx-auto px-4 relative z-10">
                             <div className="bg-amber-50 rounded-3xl shadow-lg p-8 md:p-12 border-2 border-amber-100 transform hover:scale-[1.01] transition duration-500">
@@ -312,7 +314,7 @@
                             <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row">
                                 <div className="md:w-1/2 h-64 md:h-auto relative">
                                     <img 
-                                        src="https://images.unsplash.com/photo-1628606138676-e260840c112e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                                        src="images/product-1.jpg" 
                                         alt="กล่องอินทผลัม" 
                                         className="w-full h-full object-cover"
                                     />
